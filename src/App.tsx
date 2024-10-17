@@ -17,7 +17,7 @@ const App: React.FC = () => {
       log: false,
       config: "gpl-extended",
     });
-    ffmpegRef.current.whenReady(() =>{
+    ffmpegRef.current.whenReady(() => {
       setIsDownloading(false);
     });
   }, []);
@@ -26,7 +26,7 @@ const App: React.FC = () => {
     setIsDownloading(true);
     setIsDownloading(false);
     const ffmpeg = ffmpegRef.current;
-    
+
     if (!ffmpeg) {
       return;
     }
@@ -50,7 +50,7 @@ const App: React.FC = () => {
         setOutputFileSize(parseInt(data));
       }
     });
-    const outputFileName = "output.mp4";
+    const outputFileName = `${inputFile.name.replace(/\.[^/.]+$/, "")}.mp4`;
     await ffmpeg
       .exec([
         "-i", inputFile.name,
@@ -75,7 +75,7 @@ const App: React.FC = () => {
     setInputFile(acceptedFiles[0]);
   };
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop, accept: { "video/*": [] }});
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop, accept: { "video/*": [] } });
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 px-12 md:px-0">
@@ -131,14 +131,24 @@ const App: React.FC = () => {
           {outputFileSize > 0 && <p>Output file size: {(outputFileSize / 1024 / 1024).toFixed(2)} MB</p>}
         </div>
 
+        {outputFile && (
+          <a
+            href={outputFile}
+            download={inputFile?.name.replace(/\.[^/.]+$/, "") + ".mp4"}
+            className="mt-4 btn btn-accent"
+          >
+            Download
+          </a>
+        )}
+
         <footer className="footer items-center justify-between pt-20 text-gray-400">
           <div className="items-end grid-flow-col ">
             <p>Copyright © 2023 - All right reserved </p>
           </div>
           <div className="grid-flow-col">
-          {/* add home link to about page */}
+            {/* add home link to about page */}
             <a href="https://blog.sideeffect.dev/about" target="_blank">
-              <svg 
+              <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
                 height="24"
@@ -149,12 +159,12 @@ const App: React.FC = () => {
                 strokeLinecap="round"
                 strokeLinejoin="round"
               >
-                <circle cx="12" cy="12" r="10"/>
-                <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/>
-                <path d="M2 12h20"/>
+                <circle cx="12" cy="12" r="10" />
+                <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" />
+                <path d="M2 12h20" />
               </svg>
             </a>
-            <a href="https://github.com/iketiunn/webm-to-mp4" target="_blank">
+            <a href="https://github.com/en9inerd/vid2mp4" target="_blank">
               <svg
                 width="20"
                 height="20"
